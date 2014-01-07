@@ -645,8 +645,10 @@ class AppReleaseViewSet(BaseAppViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
         prev = app.release_set.get(version=version)
         with transaction.atomic():
+            summary = "{} rolled back to {}".format(request.user, version)
             app.release_set.create(owner=request.user, version=last_version + 1,
-                                   build=prev.build, config=prev.config)
+                                   build=prev.build, config=prev.config,
+                                   summary=summary)
             app.converge()
         msg = "Rolled back to {}".format(version)
         return Response(msg, status=status.HTTP_201_CREATED)
