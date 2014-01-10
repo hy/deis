@@ -46,7 +46,7 @@ $ ./contrib/rackspace/prepare-rackspace-image.sh
 ```
 
 4. Run the provisioning script to create a new Deis controller:
-    * change ```<region>``` to be one of:
+    * Change ```<region>``` to be one of:
         * dfw
         * ord
         * iad
