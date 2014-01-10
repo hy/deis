@@ -828,7 +828,7 @@ class Release(UuidAuditedModel):
             old_build = prev_release.build if prev_release else None
             # if the build changed, log it and who pushed it
             if self.build != old_build and self.build.sha:
-                self.summary += "{} pushed {}".format(self.build.owner, self.build.sha)
+                self.summary += "{} deployed {}".format(self.build.owner, self.build.sha[:7])
             # compare this config to the previous config
             old_config = prev_release.config if prev_release else None
             # if the config data changed, log the dict diff
@@ -838,17 +838,14 @@ class Release(UuidAuditedModel):
                 diff = dict_diff(dict1, dict2)
                 # try to be as succinct as possible
                 # TODO: truncate long values too?
-                added = ', '.join("(+){}={}".format(k, v)
-                                  for k, v in diff.get('added', {}).items())
-                changed = ', '.join("{}={}".format(k, v)
-                                    for k, v in diff.get('changed', {}).items())
-                deleted = ', '.join("(-){}".format(k)
-                                    for k in diff.get('deleted', {}))
+                added = ', '.join(k for k in diff.get('added', {}))
+                changed = ', '.join(k for k in diff.get('changed', {}))
+                deleted = ', '.join(k for k in diff.get('deleted', {}))
                 changes = ', '.join(i for i in (added, changed, deleted) if i)
                 if changes:
                     if self.summary:
                         self.summary += ' and '
-                    self.summary += "{} changed {}".format(self.config.owner, changes)
+                    self.summary += "{} {}".format(self.config.owner, changes)
                 if not self.summary:
                     self.summary = "{} created the initial release".format(self.owner)
         super(Release, self).save(*args, **kwargs)

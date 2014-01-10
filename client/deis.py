@@ -51,6 +51,7 @@ from threading import Event
 from threading import Thread
 import glob
 import json
+import locale
 import os.path
 import random
 import re
@@ -60,13 +61,18 @@ import tempfile
 import time
 import urlparse
 import webbrowser
-import yaml
 
+from dateutil import parser
+from dateutil import tz
 from docopt import docopt
 from docopt import DocoptExit
 import requests
+import yaml
 
 __version__ = '0.4.0'
+
+
+locale.setlocale(locale.LC_ALL, '')
 
 
 class Session(requests.Session):
@@ -294,6 +300,16 @@ def get_provider_creds(provider, raise_error=False):
     if raise_error:
         raise EnvironmentError(
             "Missing environment variable: {}".format(missing))
+
+
+def readable_datetime(datetime_str):
+    """
+    Return a human-readable datetime string from an ECMA-262 (JavaScript)
+    datetime string.
+    """
+    dt = parser.parse(datetime_str)
+    local_dt = dt.astimezone(tz.tzlocal())
+    return local_dt.strftime('%x %X %z')
 
 
 def trim(docstring):
@@ -1926,6 +1942,8 @@ class DeisClient(object):
         Usage: deis releases:info <version> [--app=<app>]
         """
         version = args.get('<version>')
+        if not version.startswith('v'):
+            version = 'v' + version
         app = args.get('--app')
         if not app:
             app = self._session.app
@@ -1950,7 +1968,8 @@ class DeisClient(object):
             print("=== {} Releases".format(app))
             data = response.json()
             for item in data['results']:
-                print("{version} {created} {summary}".format(**item))
+                item['created'] = readable_datetime(item['created'])
+                print("v{version} {created} {summary}".format(**item))
         else:
             raise ResponseError(response)
 
