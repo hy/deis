@@ -35,6 +35,7 @@ Provision a Deis Controller on Rackspace
     1. Install the 3.8 kernel with: ```apt-get update && apt-get install -yq linux-image-generic-lts-raring linux-headers-generic-lts-raring && reboot```
     1. After reboot is complete, SSH back in as root and `uname -r` to confirm kernel is `3.8.0-35-generic`
     1. Run the `prepare-rackspace-image.sh` script to optimize the image for fast boot times
+    
         ```console
         $ ./contrib/rackspace/prepare-rackspace-image.sh
         + dpkg -l 'linux-*'
@@ -62,6 +63,7 @@ Provision a Deis Controller on Rackspace
         * lon
         * syd
         * hkg
+        
         ```console
         $ ./contrib/rackspace/provision-rackspace-controller.sh <region>
         Provisioning a deis controller on Rackspace...
