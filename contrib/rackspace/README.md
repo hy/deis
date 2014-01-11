@@ -33,18 +33,18 @@ Instance ID  Name  Public IP  Private IP  Flavor  Image  State
     1. Install the 3.8 kernel with: ```apt-get update && apt-get install -yq linux-image-generic-lts-raring linux-headers-generic-lts-raring && reboot```
     1. After reboot is complete, SSH back in as root and `uname -r` to confirm kernel is `3.8.0-35-generic`
     1. Run the `prepare-rackspace-image.sh` script to optimize the image for fast boot times
-```console
-$ ./contrib/rackspace/prepare-rackspace-image.sh
-+ dpkg -l 'linux-*'
-+ xargs sudo apt-get -y purge
-++ uname -r
-++ sed 's/\(.*\)-\([^0-9]\+\)/\1/'
-...
-+ rm -f /root/.ssh/authorized_keys
-+ find /var/log -type f
-+ xargs rm
-+ sync
-```
+    ```console
+    $ ./contrib/rackspace/prepare-rackspace-image.sh
+    + dpkg -l 'linux-*'
+    + xargs sudo apt-get -y purge
+    ++ uname -r
+    ++ sed 's/\(.*\)-\([^0-9]\+\)/\1/'
+    ...
+    + rm -f /root/.ssh/authorized_keys
+    + find /var/log -type f
+    + xargs rm
+    + sync
+    ```
 
 4. Create a new image from the server named "deis-base-image".
     1. In the server list in the Control Panel click the action cog for `deis_prepare_image`        
@@ -60,7 +60,7 @@ $ ./contrib/rackspace/prepare-rackspace-image.sh
         * lon
         * syd
         * hkg
-```console
+        ```console
 $ ./contrib/rackspace/provision-rackspace-controller.sh <region>
 Provisioning a deis controller on Rackspace...
 Creating new SSH key: deis-controller
