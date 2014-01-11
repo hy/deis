@@ -61,8 +61,6 @@ Provision a Deis Controller on Rackspace
         * ord
         * iad
         * lon
-        * syd
-        * hkg
         
         ```console
         $ ./contrib/rackspace/provision-rackspace-controller.sh <region>
